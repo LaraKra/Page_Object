@@ -10,6 +10,7 @@ import ru.netology.page.LoginPage;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import static com.codeborne.selenide.Selenide.open;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 
 public class MoneyTransferTest {
     @BeforeEach
@@ -34,6 +35,21 @@ public class MoneyTransferTest {
         val actualSecondResult = dashboardPage.getSecondCardBalance();
         assertEquals(balanceFirstResult, actualFirstResult);
         assertEquals(balanceSecondResult, actualSecondResult);
+    }
+    @Test
+    void shouldTransferMoneyFromSecondNegativeAmount() {
+
+        val dashboardPage = new DashboardPage();
+        int amount = -800;
+        val balanceSecondResult = dashboardPage.getSecondCardBalance() - amount;
+        val balanceFirstResult = dashboardPage.getFirstCardBalance() + amount;
+        val transferPage = dashboardPage.firstCardBalance();
+        transferPage.actionTransfer(DataHelper.getSecondCardNumber(), amount);
+        val actualFirstResult = dashboardPage.getFirstCardBalance();
+        val actualSecondResult = dashboardPage.getSecondCardBalance();
+        assertNotEquals(balanceFirstResult, actualFirstResult);
+        assertNotEquals(balanceSecondResult, actualSecondResult);
+
     }
 
     }
