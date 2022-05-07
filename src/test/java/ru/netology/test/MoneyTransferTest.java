@@ -22,6 +22,7 @@ public class MoneyTransferTest {
         val verificationInfo = DataHelper.getVerificationCode(authInfo);
         val dashboardPage = verificationPage.validVerify(verificationInfo);
     }
+
     @Test
     void shouldTransferMoneyFromFirst() {
 
@@ -36,6 +37,7 @@ public class MoneyTransferTest {
         assertEquals(balanceFirstResult, actualFirstResult);
         assertEquals(balanceSecondResult, actualSecondResult);
     }
+
     @Test
     void shouldTransferMoneyFromSecondNegativeAmount() {
 
@@ -52,4 +54,20 @@ public class MoneyTransferTest {
 
     }
 
+    @Test
+    void shouldTransferMoneyFromSecondZeroAmount() {
+
+        val dashboardPage = new DashboardPage();
+        int amount = 0;
+        val balanceSecondResult = dashboardPage.getSecondCardBalance() - amount;
+        val balanceFirstResult = dashboardPage.getFirstCardBalance() + amount;
+        val transferPage = dashboardPage.firstCardBalance();
+        transferPage.actionTransfer(DataHelper.getSecondCardNumber(), amount);
+        val actualFirstResult = dashboardPage.getFirstCardBalance();
+        val actualSecondResult = dashboardPage.getSecondCardBalance();
+        assertEquals(balanceFirstResult, actualFirstResult);
+        assertEquals(balanceSecondResult, actualSecondResult);
+
     }
+
+}
